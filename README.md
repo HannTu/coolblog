@@ -6,10 +6,16 @@ Launching project:
 mvn install
 
 2. Copy coolblog.war (from target/) to your Tomcat webapps folder
+
 3. Run Tomcat
 
 catalina start
 
 4. Load application using a web browser
 
-http://localhost:8080/coolblog/
+http://localhost:8080/coolblog/posts/
+
+
+---
+
+You can deploy and run application with autorun.sh script if you have set up your CATALINA_HOME variable

@@ -21,7 +21,9 @@
                     <div class="col-sm-6 col-md-3" style="padding-bottom: 10 px">
                         <div class="thumbnail">
                             <div class="caption">
-                                <h3>${post.content}</h3>
+                                <a href="${contextPath}/posts/show/${post.postId}">
+                                    <h3>${post.title}</h3>
+                                </a>
                             </div>
                         </div>
                     </div>

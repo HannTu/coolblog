@@ -2,15 +2,14 @@ package com.codecool.coolblog.controller;
 
 import com.codecool.coolblog.model.Post;
 import com.codecool.coolblog.repository.PostRepository;
+import com.codecool.coolblog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by ehantul on 2017-09-30.
@@ -20,10 +19,12 @@ import java.util.List;
 public class PostsController {
 
     private PostRepository postRepository;
+    private PostService postService;
 
     @Autowired
-    public PostsController(PostRepository postRepository) {
+    public PostsController(PostRepository postRepository, PostService postService) {
         this.postRepository = postRepository;
+        this.postService = postService;
     }
 
     @GetMapping("/")
@@ -34,14 +35,25 @@ public class PostsController {
     }
 
     @GetMapping("/add")
-    public String getNewPostForm(Model model){
+    public String getNewPostForm(Model model) {
         model.addAttribute("newPost", new Post());
         return "newPost";
     }
 
     @PostMapping("/add")
-    public String submitPost(@ModelAttribute("newPost") Post post){
-        postRepository.save(post);
+    public String submitPost(@ModelAttribute("newPost") Post postWithContent) {
+        postRepository.save(postWithContent);
         return "redirect:/posts/";
+    }
+
+    @GetMapping("/show/{id}")
+    public String getPostById(@PathVariable int id, Model model) {
+        Optional<Post> post = postRepository.findOneById(id);
+        if (post.isPresent()) {
+            postService.addPostAndItsElementsToModel(model, post.get());
+            return "singlePostView";
+        } else {
+            return "noSuchPostView";
+        }
     }
 }
